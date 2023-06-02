@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/templates/template.xhtml">
+	
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewParam name="funAcao" value="#{MBFuncionarios.acao}" />
+			<f:viewParam name="funCod" value="#{MBFuncionarios.codigo}" />
+			<f:event listener="#{MBFuncionarios.carregarCadastro}"
+				type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="frmFunCad">
+			<p:panel header="Funcionários">
+				<h:panelGrid columns="2" id="pnFunCad">
+					<p:outputLabel value="Código" />
+					<p:inputText maxlength="20" size="10" disabled="true" value="#{MBFuncionarios.funcionario.codigo}" />
+					
+					<p:outputLabel value="Nome" />
+					<p:inputText maxlength="50" size="30" value="#{MBFuncionarios.funcionario.nome}" 
+						disabled="#{MBFuncionarios.acao == 'Excluir'}" required="true" requiredMessage="O campo nome é obrigatório." />
+						
+					<p:outputLabel value="CPF" />
+					<p:inputMask mask="999.999.999-99" maxlength="11" size="30" value="#{MBFuncionarios.funcionario.cpf}" 
+						disabled="#{MBFuncionarios.acao == 'Excluir'}" required="true" requiredMessage="O campo CPF é obrigatório." />
+						
+					<p:outputLabel value="Senha" />
+					<p:password maxlength="8" size="30" value="#{MBFuncionarios.funcionario.senha}" 
+						disabled="#{MBFuncionarios.acao == 'Excluir'}" required="true" requiredMessage="O campo senha é obrigatório." />
+					
+					<p:outputLabel value="Cargo" />						
+					<p:selectOneMenu value="#{MBFuncionarios.funcionario.funcao}" 
+						disabled="#{MBFuncionarios.acao == 'Excluir'}" required="true" requiredMessage="O campo cargo é obrigatório.">
+						<f:selectItem itemValue="Cargo não definido." itemLabel="Selecione um Cargo" />
+						<f:selectItem itemValue="Administrador" itemLabel="Administrador" />
+						<f:selectItem itemValue="Gerente" itemLabel="Gerente" />
+						<f:selectItem itemValue="Balconista" itemLabel="Balconista" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+
+				<h:panelGrid columns="3">
+					<p:commandButton value="Salvar" actionListener="#{MBFuncionarios.salvar}"
+						update=":msgGlobal :frmFunCad:pnFunCad" style="width: 100px" 
+						rendered="#{MBFuncionarios.acao == 'Novo'}" />
+
+					<p:commandButton value="Excluir" actionListener="#{MBFuncionarios.excluir}"
+						update=":msgGlobal :frmFunCad:pnFunCad" style="width: 100px" rendered="#{MBFuncionarios.acao == 'Excluir'}">
+						<p:confirm header="Atenção!" message="Tem certeza de que deseja excluir esse funcionário" />
+					</p:commandButton>	
+
+					<p:commandButton value="Editar" actionListener="#{MBFuncionarios.editar}"
+						update=":msgGlobal :frmFunCad:pnFunCad" style="width: 100px" rendered="#{MBFuncionarios.acao == 'Editar'}" />
+					
+					<p:button value="Voltar" outcome="/pages/funcionarioPesquisa.xhtml"
+						style="width: 100px" />
+				</h:panelGrid>
+			</p:panel>
+
+			<p:confirmDialog id="confirmationDialogId" global="true">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+	</ui:define>
+	</ui:composition>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/templates/template.xhtml">
+	
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:event listener="#{MBFuncionarios.prepararPesquisa}"
+				type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+	
+	<ui:define name="conteudo">
+		<h:form>
+			<p:panel header="Funcionários">	
+			<h:outputText value="Lista de Funcionários:" style="font-weight: bold;" />
+				<p:dataTable emptyMessage="Nenhum registro encontrado." value="#{MBFuncionarios.itens}"
+							 filteredValue="#{MBFuncionarios.itensFiltrados}" var="funcionario" 
+							 rows="20" paginator="true" paginatorPosition="bottom">
+					<p:column headerText="Código" filterBy="#{funcionario.codigo}">
+						<h:outputText value="#{funcionario.codigo}" />
+					</p:column>
+					
+					<p:column headerText="Nome" filterBy="#{funcionario.nome}" sortBy="#{funcionario.nome}">
+						<h:outputText value="#{funcionario.nome}" />
+					</p:column>
+					
+					<p:column headerText="Cargo">
+						<h:outputText value="#{funcionario.funcao}" />
+					</p:column>
+					
+					<p:column headerText="CPF" filterBy="#{funcionario.cpf}">
+						<h:outputText value="#{funcionario.cpf}" />
+					</p:column>
+					
+					<p:column headerText="Opções" style="text-align: center;"> 
+						<p:button icon="ui-icon-pencil" outcome="/pages/funcionarioCadastro.xhtml">
+							<f:param name="funCod" value="#{funcionario.codigo}" />
+							<f:param name="funAcao" value="Editar" />
+						</p:button>
+						
+						<p:button icon="ui-icon-trash" outcome="/pages/funcionarioCadastro.xhtml">
+							<f:param name="funCod" value="#{funcionario.codigo}" />
+							<f:param name="funAcao" value="Excluir" />
+						</p:button>
+					</p:column>
+				
+				</p:dataTable>
+				<h:panelGrid columns="4">
+					<p:button value="Cadastrar novo Funcionário" outcome="/pages/funcionarioCadastro.xhtml">
+						<f:param name="funAcao" value="Novo" />
+					</p:button>
+				</h:panelGrid>
+			</p:panel>
+		</h:form>
+	</ui:define>
+	</ui:composition>

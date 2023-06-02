@@ -1,0 +1,8 @@
+@charset "ISO-8859-1";
+.ui-widget, .ui-widget .ui-widget {
+font-size: 100% !important;
+}
+
+.bold {
+    font-weight: bold !important;
+}

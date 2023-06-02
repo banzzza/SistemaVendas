@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/templates/template.xhtml">
+	
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewParam name="proAcao" value="#{MBProdutos.acao}" />
+			<f:viewParam name="proCod" value="#{MBProdutos.codigo}" />
+			<f:event listener="#{MBProdutos.carregarCadastro}"
+				type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="frmProCad">
+			<p:panel header="Produtos">
+				<h:panelGrid columns="2" id="pnProCad">
+					<p:outputLabel value="Código" />
+					<p:inputText maxlength="20" size="10" disabled="true" value="#{MBProdutos.produto.proCodigo}" />
+					
+					<p:outputLabel value="Descrição" />
+					<p:inputText maxlength="50" size="30" value="#{MBProdutos.produto.proDescricao}" 
+						disabled="#{MBProdutos.acao == 'Excluir'}" required="true" requiredMessage="O campo descrição é obrigatório." />
+						
+					<p:outputLabel value="Valor" />
+					<p:inputText size="30" value="#{MBProdutos.produto.proValor}" 
+						disabled="#{MBProdutos.acao == 'Excluir'}" required="true" requiredMessage="O campo valor é obrigatório." />
+						
+					<p:outputLabel value="Quantidade" />
+					<p:inputText maxlength="9" size="30" value="#{MBProdutos.produto.proQuantidade}" 
+						disabled="#{MBProdutos.acao == 'Excluir'}" required="true" requiredMessage="O campo quantidade é obrigatório." />
+					
+					<p:outputLabel value="Fornecedor" />
+					<p:selectOneMenu value="#{MBProdutos.produto.fornecedor}" disabled="#{MBProdutos.acao == 'Excluir'}"
+						converter="fornecedoresConverter">
+						<f:selectItem itemValue="Fornecedor não definido." itemLabel="Selecione um Fornecedor" />
+						<f:selectItems value="#{MBProdutos.listaFornecedor}" var="fornecedor" 
+						itemValue="#{fornecedor}" itemLabel="#{fornecedor.descricao}" />
+					</p:selectOneMenu>
+					
+				</h:panelGrid>
+
+				<h:panelGrid columns="3">
+					<p:commandButton value="Salvar" actionListener="#{MBProdutos.salvar}"
+						update=":msgGlobal :frmProCad:pnProCad" style="width: 100px" 
+						rendered="#{MBProdutos.acao == 'Novo'}" />
+
+					<p:commandButton value="Excluir" actionListener="#{MBProdutos.excluir}"
+						update=":msgGlobal :frmProCad:pnProCad" style="width: 100px" rendered="#{MBProdutos.acao == 'Excluir'}">
+						<p:confirm header="Atenção!" message="Tem certeza de que deseja excluir esse produto?" />
+					</p:commandButton>	
+
+					<p:commandButton value="Editar" actionListener="#{MBProdutos.editar}"
+						update=":msgGlobal :frmProCad:pnProCad" style="width: 100px" rendered="#{MBProdutos.acao == 'Editar'}" />
+					
+					<p:button value="Voltar" outcome="/pages/produtoPesquisa.xhtml"
+						style="width: 100px" />
+				</h:panelGrid>
+			</p:panel>
+
+			<p:confirmDialog id="confirmationDialogId" global="true">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+	</ui:define>
+	</ui:composition>

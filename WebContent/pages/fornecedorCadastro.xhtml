@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/templates/template.xhtml">
+
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewParam name="forAcao" value="#{MBFornecedores.acao}" />
+			<f:viewParam name="forCod" value="#{MBFornecedores.codigo}" />
+			<f:event listener="#{MBFornecedores.carregarCadastro}"
+				type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="frmForCad">
+			<p:panel header="Fornecedores">
+				<h:panelGrid columns="2" id="pnForCad">
+					<p:outputLabel value="Código" />
+					<p:inputText maxlength="20" size="10" disabled="true" value="#{MBFornecedores.fornecedores.codigo}" />
+					
+					<p:outputLabel value="Descrição" />
+					<p:inputText maxlength="50" size="30" value="#{MBFornecedores.fornecedores.descricao}" 
+						disabled="#{MBFornecedores.acao == 'Excluir'}" required="true" requiredMessage="O campo descrição é obrigatório." />
+						
+					<p:outputLabel value="CNPJ" />
+					<p:inputMask mask="99.999.999/9999-99" maxlength="14" size="20" value="#{MBFornecedores.fornecedores.cnpj}" 
+						disabled="#{MBFuncionarios.acao == 'Excluir'}" required="true" requiredMessage="O campo CNPJ é obrigatório." />
+				</h:panelGrid>
+
+				<h:panelGrid columns="3">
+					<p:commandButton value="Salvar" actionListener="#{MBFornecedores.salvar}"
+						update=":msgGlobal :frmForCad:pnForCad" style="width: 100px" 
+						rendered="#{MBFornecedores.acao == 'Novo'}" />
+
+					<p:commandButton value="Excluir" actionListener="#{MBFornecedores.excluir}"
+						update=":msgGlobal :frmForCad:pnForCad" style="width: 100px" rendered="#{MBFornecedores.acao == 'Excluir'}">
+						<p:confirm header="Atenção!" message="Tem certeza de que deseja excluir esse fornecedor?" />
+					</p:commandButton>	
+
+					<p:commandButton value="Editar" actionListener="#{MBFornecedores.editar}"
+						update=":msgGlobal :frmForCad:pnForCad" style="width: 100px" rendered="#{MBFornecedores.acao == 'Editar'}" />
+					
+					<p:button value="Voltar" outcome="/pages/fornecedorPesquisa.xhtml"
+						style="width: 100px" />
+				</h:panelGrid>
+			</p:panel>
+
+			<p:confirmDialog id="confirmationDialogId" global="true">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+	</ui:define>
+	</ui:composition>

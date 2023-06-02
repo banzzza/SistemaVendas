@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/templates/template.xhtml">
+	
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:event listener="#{MBVendas.prepararPesquisa}"
+				type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+	
+	<ui:define name="conteudo">
+		<h:form>
+			<p:panel header="Registro de Vendas">	
+				<p:dataTable emptyMessage="Nenhum registro encontrado." value="#{MBVendas.itensVendas}"
+							 var="vendas" rows="20" paginator="true" paginatorPosition="bottom">
+					<p:column headerText="Código">
+						<h:outputText value="#{vendas.venCodigo}" />
+					</p:column>
+					
+					<p:column headerText="Funcionário">
+						<h:outputText value="#{vendas.funcionario.nome}" />
+					</p:column>
+					
+					<p:column headerText="Valor da Venda">
+						<h:outputText value="#{vendas.venValorTotal}" />
+					</p:column>
+					
+					<p:column headerText="Data da Venda">
+						<h:outputText value="#{vendas.venHorario}">
+							<f:convertDateTime pattern="dd/MM/yyyy - HH:mm" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+	</ui:define>
+	</ui:composition>
